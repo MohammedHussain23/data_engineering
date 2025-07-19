@@ -17,11 +17,15 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 # Example: Fetch the first five customers
-cur.execute("SELECT customer_id, first_name, last_name FROM customer LIMIT 5;")
+cur.execute("""
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = 'public';
+""")
 rows = cur.fetchall()
 
 for row in rows:
-    print(row)
+    print(row[0])
 
 cur.close()
 conn.close()
