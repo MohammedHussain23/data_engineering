@@ -33,7 +33,7 @@ df.to_sql(
     index=False
 )
 
-print("Raw data (with duplicates) loaded into table: people_raw")
+print("Raw data (with duplicates) loaded into table: sample_people_raw")
 
 # Step 3: Remove duplicates
 df_cleaned = df.drop_duplicates()
