@@ -46,4 +46,4 @@ df_cleaned.to_sql(
     if_exists='replace', # Overwrites table with de-duplicated data
     index=False
 )
-print("Cleaned data (duplicates removed) written to table: people_cleaned")
+print("Cleaned data (duplicates removed) written to table: sample_people_cleaned")
