@@ -1,12 +1,13 @@
-import pandas as pd # type: ignore
+import pandas as pd  # type: ignore
 import random
-from faker import Faker # type: ignore
+from faker import Faker  # type: ignore
 from datetime import datetime, timedelta
 import os
 
 fake = Faker()
 random.seed(42)
 Faker.seed(42)
+
 
 def generate_rows(n, base_date):
     rows = []
@@ -29,10 +30,12 @@ def generate_rows(n, base_date):
         ])
     return rows
 
-# Use the current date when the script is run
-current_date = datetime.now()
 
-# Add some duplicate rows randomly
+# Use the current datetime for base
+current_date = datetime.now()
+date_str = current_date.date().isoformat()  # For filename like 2025-07-20
+
+# Generate and sample data
 data1 = generate_rows(190, current_date)
 data2 = random.choices(data1, k=50)  # 50 duplicates
 
@@ -47,10 +50,20 @@ df = pd.DataFrame(
     ]
 )
 
+# Set up output directory
 output_dir = os.path.join(os.path.dirname(__file__), "daily_ingest")
 os.makedirs(output_dir, exist_ok=True)
-output_path = os.path.join(output_dir, f'booking_data_{current_date.date()}.csv')
+
+# Generate next available filename using counter
+base_filename = f"booking_data_{date_str}"
+counter = 1
+while True:
+    candidate_filename = f"{base_filename}_{counter}.csv"
+    output_path = os.path.join(output_dir, candidate_filename)
+    if not os.path.exists(output_path):
+        break
+    counter += 1
+
+# Save CSV
 df.to_csv(output_path, index=False)
-
-
-print(f"Generated dynamic sample CSV at: {output_path}")
+print(f"Generated CSV file: {output_path}")
