@@ -32,12 +32,12 @@ if not silver_ts:
     exit(0)
 
 gold_ts = set()
-gold_table_exists = inspector.has_table('booking_summary', schema='gl_fake')
+gold_table_exists = inspector.has_table('fake_data_summary', schema='gl_fake')
 if gold_table_exists:
     try:
         with engine.connect() as conn:
             gold_ts_df = pd.read_sql(
-                "SELECT DISTINCT silver_ingestion_timestamp FROM gl_fake.booking_summary", conn
+                "SELECT DISTINCT silver_ingestion_timestamp FROM gl_fake.fake_data_summary", conn
             )
             gold_ts = set(gold_ts_df["silver_ingestion_timestamp"])
     except Exception as e:
@@ -64,11 +64,10 @@ for ts in sorted(silver_only):
 
         # Gold aggregation (example: sum by route and travel date)
         agg = (
-            silver_batch.groupby(['origin_destination', 'travel_date'])
+            silver_batch.groupby(['origin_destination', 'travel_date', 'booking_date'])
             .agg(
                 total_passengers=pd.NamedAgg(column="passenger_count", aggfunc="sum"),
-                total_sales=pd.NamedAgg(column="sale_amount", aggfunc="sum"),
-                unique_bookings=pd.NamedAgg(column="batch_id", aggfunc="count")
+                total_sales=pd.NamedAgg(column="sale_amount", aggfunc="sum")
             )
             .reset_index()
         )
@@ -81,7 +80,7 @@ for ts in sorted(silver_only):
 
         if_exists_mode = 'replace' if first_batch else 'append'
         agg.to_sql(
-            name="booking_summary",
+            name="fake_data_summary",
             con=engine,
             schema="gl_fake",
             if_exists=if_exists_mode,
@@ -90,7 +89,7 @@ for ts in sorted(silver_only):
         )
         first_batch = False
 
-        print(f"Loaded aggregation for {ts} into gl_fake.booking_summary.")
+        print(f"Loaded aggregation for {ts} into gl_fake.fake_data_summary.")
     except Exception as e:
         print(f"Error in Gold aggregation for batch {ts}: {e}")
 
