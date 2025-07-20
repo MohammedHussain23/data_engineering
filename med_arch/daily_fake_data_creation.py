@@ -36,8 +36,10 @@ current_date = datetime.now()
 date_str = current_date.date().isoformat()  # For filename like 2025-07-20
 
 # Generate and sample data
-data1 = generate_rows(190, current_date)
-data2 = random.choices(data1, k=50)  # 50 duplicates
+number_of_rows = random.randint(100, 200)
+number_of_duplicates = random.randint(10, 50)
+data1 = generate_rows(number_of_rows, current_date)
+data2 = random.choices(data1, k=number_of_duplicates)  # 50 duplicates
 
 df = pd.DataFrame(
     data1 + data2,
