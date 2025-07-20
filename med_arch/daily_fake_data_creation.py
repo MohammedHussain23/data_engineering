@@ -12,15 +12,16 @@ Faker.seed(42)
 def generate_rows(n, base_date):
     rows = []
     for _ in range(n):
-        booking_offset = random.randint(0, 10)
-        travel_offset = booking_offset + random.randint(1, 5)
+        booking_offset = random.randint(0, 365)
+        travel_offset = booking_offset + random.randint(1, 365)
         booking_date = (base_date - timedelta(days=booking_offset)).date()
         travel_date = (base_date + timedelta(days=travel_offset)).date()
-        origin = random.choice(['DEL', 'BOM', 'MAA', 'HYD', 'BLR', 'COK', 'CCU', 'JAI', 'PNQ', 'LKO'])
-        dest = random.choice([x for x in ['DEL', 'BOM', 'MAA', 'HYD', 'BLR', 'COK', 'CCU', 'JAI', 'PNQ', 'LKO'] if x != origin])
+        locations = ['DEL', 'BOM', 'MAA', 'HYD', 'BLR', 'COK', 'CCU', 'JAI', 'PNQ', 'LKO','JFK','AMD','SFO','LAX', 'ORD', 'ATL', 'DFW', 'SEA', 'MIA', 'BOS', 'PHX', 'IAH', 'CLT', 'DEN', 'LAS', 'EWR', 'MSP', 'DTW', 'HNL', 'OAK', 'SAN', 'MCO', 'BWI', 'SLC', 'STL', 'TPA', 'HOU', 'PIT', 'RDU', 'AUS', 'CLE', 'CMH', 'IND', 'MIL', 'JAX', 'MEM', 'BNA', 'OKC', 'OMA', 'ALB', 'BUF', 'RNO', 'SJC', 'SLC', 'TUS', 'PVD', 'RIC', 'SAV', 'TUL', 'WAS', 'PHL', 'BWI', 'BOS', 'MKE', 'MSY', 'PIT', 'SDF', 'SNA', 'SMF', 'SYR', 'TYS', 'XNA', 'YUL', 'YYZ', 'YVR', 'LHR', 'CDG', 'FRA', 'AMS', 'MAD', 'BCN', 'ZRH', 'IST', 'DXB', 'HKG', 'SIN', 'NRT', 'PEK', 'PVG', 'ICN', 'BKK', 'KUL']
+        origin = random.choice(locations)
+        dest = random.choice([x for x in locations if x != origin])
         origin_dest = f"{origin}-{dest}"
         passengers = random.randint(100, 500)
-        amount = round(random.uniform(100000, 500000), 2)
+        amount = round(random.uniform(100000, 5000000), 2)
         rows.append([
             booking_date,
             travel_date,
@@ -36,8 +37,8 @@ current_date = datetime.now()
 date_str = current_date.date().isoformat()  # For filename like 2025-07-20
 
 # Generate and sample data
-number_of_rows = random.randint(100, 200)
-number_of_duplicates = random.randint(10, 50)
+number_of_rows = random.randint(100, 20000)
+number_of_duplicates = random.randint(10, 500)
 data1 = generate_rows(number_of_rows, current_date)
 data2 = random.choices(data1, k=number_of_duplicates)  # 50 duplicates
 
