@@ -12,10 +12,10 @@ Faker.seed(42)
 def generate_rows(n, base_date):
     rows = []
     for _ in range(n):
-        booking_offset = random.randint(0, 365)
-        travel_offset = booking_offset + random.randint(1, 365)
+        booking_offset = random.randint(0, 364)
+        travel_offset = random.randint(0, 364)
         booking_date = (base_date - timedelta(days=booking_offset)).date()
-        travel_date = (base_date + timedelta(days=travel_offset)).date()
+        travel_date = (booking_date + timedelta(days=travel_offset)).date()
         locations = ['DEL', 'BOM', 'MAA', 'HYD', 'BLR', 'COK', 'CCU', 'JAI', 'PNQ', 'LKO','JFK','AMD','SFO','LAX', 'ORD', 'ATL', 'DFW', 'SEA', 'MIA', 'BOS', 'PHX', 'IAH', 'CLT', 'DEN', 'LAS', 'EWR', 'MSP', 'DTW', 'HNL', 'OAK', 'SAN', 'MCO', 'BWI', 'SLC', 'STL', 'TPA', 'HOU', 'PIT', 'RDU', 'AUS', 'CLE', 'CMH', 'IND', 'MIL', 'JAX', 'MEM', 'BNA', 'OKC', 'OMA', 'ALB', 'BUF', 'RNO', 'SJC', 'SLC', 'TUS', 'PVD', 'RIC', 'SAV', 'TUL', 'WAS', 'PHL', 'BWI', 'BOS', 'MKE', 'MSY', 'PIT', 'SDF', 'SNA', 'SMF', 'SYR', 'TYS', 'XNA', 'YUL', 'YYZ', 'YVR', 'LHR', 'CDG', 'FRA', 'AMS', 'MAD', 'BCN', 'ZRH', 'IST', 'DXB', 'HKG', 'SIN', 'NRT', 'PEK', 'PVG', 'ICN', 'BKK', 'KUL']
         origin = random.choice(locations)
         dest = random.choice([x for x in locations if x != origin])
