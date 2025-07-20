@@ -74,7 +74,7 @@ for file in csv_files:
     # Add ingestion metadata
     ingestion_timestamp = datetime.now()
     batch_id = str(uuid.uuid4())
-    df["ingestion_timestamp"] = ingestion_timestamp
+    df["bronze_ingestion_timestamp"] = ingestion_timestamp
     df["batch_id"] = batch_id
     df["source_file_name"] = file
     df["row_number_within_batch"] = range(1, len(df) + 1)
